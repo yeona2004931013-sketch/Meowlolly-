@@ -3,66 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Lolly Miu Phone</title>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <title>Lolly Miu Social</title>
     <style>
-        :root { --miu-pink: #fce4ec; --accent: #f1b0b7; --text: #5d4037; --glass: rgba(255, 255, 255, 0.85); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'ZCOOL KuaiLe', -apple-system, sans-serif; background: #000; height: 100vh; display: flex; justify-content: center; }
-
-        /* 手機容器 */
+        :root { --miu-pink: #fff0f3; --accent: #f1b0b7; --text: #5d4037; --glass: rgba(255, 255, 255, 0.9); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+        body { background: #fce4ec; height: 100vh; display: flex; justify-content: center; overflow: hidden; }
+        
+        /* 手機主殼 */
         .phone-shell { 
-            width: 100%; max-width: 500px; height: 100%; background: #fff;
-            position: relative; display: flex; flex-direction: column; overflow: hidden;
+            width: 100%; max-width: 500px; height: 100%; background: var(--miu-pink);
+            position: relative; display: flex; flex-direction: column;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); /* 星空底紋感 */
         }
 
-        /* 動態島 Widget Island */
+        /* 動態島 (參考截圖 4, 10) */
         .dynamic-island {
-            width: 130px; height: 30px; background: #000; margin: 10px auto;
-            border-radius: 20px; color: #fff; font-size: 12px;
+            width: 140px; height: 35px; background: #000; margin: 15px auto;
+            border-radius: 20px; color: #fff; font-size: 13px; font-weight: bold;
             display: flex; align-items: center; justify-content: center; z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* 視圖切換 */
-        .view { display: none; flex: 1; overflow-y: auto; padding-bottom: 80px; animation: fadeIn 0.3s; }
+        /* 視圖區域 */
+        .view { display: none; flex: 1; overflow-y: auto; padding-bottom: 90px; }
         .view.active { display: flex; flex-direction: column; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- 首頁 (IG風格) --- */
-        .stories-bar { display: flex; padding: 15px 10px; gap: 15px; overflow-x: auto; border-bottom: 1px solid #f0f0f0; scrollbar-width: none; }
-        .story { display: flex; flex-direction: column; align-items: center; min-width: 70px; cursor: pointer; }
-        .story-ring { width: 62px; height: 62px; border-radius: 50%; padding: 2px; border: 2.5px solid var(--accent); margin-bottom: 5px; }
-        .story-img { width: 100%; height: 100%; border-radius: 50%; background: #eee; background-size: cover; background-position: center; }
-        .story span { font-size: 11px; color: var(--text); }
+        /* 朋友圈卡片 (參考截圖 5, 9) */
+        .post-card { 
+            background: var(--glass); margin: 12px; border-radius: 20px; 
+            padding: 15px; box-shadow: 0 5px 15px rgba(241,176,183,0.2);
+        }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; background-size: cover; border: 2px solid var(--accent); }
+        .post-img-box { 
+            width: 100%; aspect-ratio: 1/1; background: #fdf2f4; border-radius: 15px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; border: 2px dashed var(--accent); color: var(--accent);
+            overflow: hidden; margin: 10px 0; font-size: 12px;
+        }
+        .post-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .post-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+        
+        /* 評論區 */
+        .comments { margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
+        .comment-item { font-size: 12px; margin-bottom: 4px; }
+        .comment-item b { color: var(--accent); margin-right: 5px; }
 
-        .post-card { margin-top: 10px; }
-        .post-header { display: flex; align-items: center; padding: 10px; gap: 10px; font-weight: bold; }
-        .post-img { width: 100%; aspect-ratio: 1/1; background: #f9f9f9; background-size: cover; background-position: center; cursor: pointer; }
-        .post-info { padding: 12px; font-size: 14px; line-height: 1.6; }
+        /* 發文按鈕 (粉色懸浮) */
+        .fab { 
+            position: fixed; right: 25px; bottom: 100px; width: 60px; height: 60px; 
+            background: var(--accent); border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; color: #fff; font-size: 28px;
+            box-shadow: 0 8px 20px rgba(241,176,183,0.4); z-index: 99;
+        }
 
-        /* --- 聊天室 (Miu美化版) --- */
-        .chat-container { flex: 1; display: flex; flex-direction: column; background: var(--miu-pink); background-image: radial-gradient(var(--accent) 0.5px, transparent 0.5px); background-size: 15px 15px; }
-        .chat-header { background: #fff; padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #eee; color: var(--accent); }
-        .msg-list { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .msg.bf { background: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg.me { background: var(--accent); align-self: flex-end; color: #fff; border-bottom-right-radius: 4px; }
-        .input-area { background: #fff; padding: 10px 15px 30px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #eee; }
-        .input-area input { flex: 1; border: 1px solid #eee; background: #f8f8f8; border-radius: 25px; padding: 10px 20px; outline: none; }
-
-        /* --- 個人主頁 --- */
-        .profile-header { padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .avatar-lg { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); margin-bottom: 15px; background: #eee; background-size: cover; cursor: pointer; }
-        .stats-row { display: flex; width: 100%; justify-content: space-around; margin: 20px 0; }
-        .stat-box { display: flex; flex-direction: column; font-size: 13px; }
-        .stat-box b { font-size: 16px; color: #000; }
-        .grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-        .grid-item { aspect-ratio: 1/1; background: #eee; background-size: cover; cursor: pointer; }
-
-        /* 導航欄 */
-        nav { position: absolute; bottom: 0; width: 100%; height: 65px; background: #fff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; }
-        nav span { font-size: 26px; cursor: pointer; }
-        .editable:active { opacity: 0.6; }
+        /* 導航列 (參考截圖 3) */
+        nav { 
+            position: absolute; bottom: 0; width: 100%; height: 75px; 
+            background: #fff; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 1px solid #eee; padding-bottom: 15px; 
+        }
+        nav span { font-size: 28px; cursor: pointer; opacity: 0.4; transition: 0.3s; }
+        nav span.active { opacity: 1; transform: translateY(-5px); color: var(--accent); }
     </style>
 </head>
 <body>
@@ -71,131 +73,115 @@
     <div class="dynamic-island" id="time-island">09:41</div>
 
     <div id="v-home" class="view active">
-        <div class="stories-bar" id="story-container"></div>
-        <div class="post-card">
-            <div class="post-header">
-                <div style="width:30px; height:30px; border-radius:50%; background:#eee; background-size:cover;" id="post-ava" onclick="up(this)"></div>
-                <span class="editable" onclick="edit(this)">趙雨凡</span>
-            </div>
-            <div class="post-img" id="post-main" onclick="up(this)"></div>
-            <div class="post-info">
-                <b class="editable" onclick="edit(this)">趙雨凡</b> <span class="editable" onclick="edit(this)">這張便宜妳了，過來抱一下 ^^</span>
-            </div>
-        </div>
+        <div id="feed"></div>
+        <div class="fab" onclick="userPost()">📸</div>
     </div>
 
-    <div id="v-chat" class="view">
-        <div class="chat-container">
-            <div class="chat-header" id="chat-title">安乾鎬 ^^</div>
-            <div class="msg-list" id="msgBox"></div>
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="傳送訊息...">
-                <button onclick="askAI()" style="background:none; border:none; font-size:24px;">💖</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="v-me" class="view">
-        <div class="profile-header">
-            <div class="avatar-lg" id="my-avatar" onclick="up(this)"></div>
-            <h2 class="editable" onclick="edit(this)">柔柔_Yuyu 🎀</h2>
-            <p class="editable" onclick="edit(this)" style="font-size:13px; color:#888; margin-top:5px;">桃園紅髮正妹｜Miu Miu 女孩</p>
-            <div class="stats-row">
-                <div class="stat-box"><b>5</b><span>男友</span></div>
-                <div class="stat-box"><b>99k</b><span>粉絲</span></div>
-                <div class="stat-box"><b>100%</b><span>美貌</span></div>
-            </div>
-        </div>
-        <div class="grid-wall">
-            <div class="grid-item" onclick="up(this)"></div>
-            <div class="grid-item" onclick="up(this)"></div>
-            <div class="grid-item" onclick="up(this)"></div>
+    <div id="v-chat" class="view" style="background:#fff;">
+        <div style="padding:15px; text-align:center; font-weight:bold; color:var(--accent); border-bottom:1px solid #eee;" id="chat-target">安乾鎬 ^^</div>
+        <div id="msgBox" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px;"></div>
+        <div style="padding:10px 15px 30px; display:flex; gap:10px; border-top:1px solid #eee;">
+            <input type="text" id="userInput" style="flex:1; border:1px solid #eee; border-radius:20px; padding:10px 15px; outline:none;" placeholder="傳送甜蜜訊息...">
+            <button onclick="askAI()" style="background:none; border:none; font-size:24px;">💖</button>
         </div>
     </div>
 
     <nav>
-        <span onclick="showV('home')">🏠</span>
-        <span onclick="showV('chat')">💌</span>
-        <span onclick="showV('me')">👤</span>
+        <span onclick="showV('home')" id="n-home" class="active">🏠</span>
+        <span onclick="showV('chat')" id="n-chat">💌</span>
+        <span onclick="showV('home')" id="n-me">👤</span>
     </nav>
 </div>
 
-<input type="file" id="f" accept="image/*" style="display:none;">
+<input type="file" id="fileInput" accept="image/*" style="display:none;">
 
 <script>
-    const API_KEY = "AIzaSyDwavT9b6YlpgwAW9eNkswuPsKI6QAP-AM";
-    let curUser = "柔柔";
-    let curBF = "安乾鎬";
+    const KEY = "AIzaSyDwavT9b6YlpgwAW9eNkswuPsKI6QAP-AM";
     const bfs = {
-        "安乾鎬": "黏人小狗^^，叫姐姐，愛撒嬌。水瓶座。",
-        "趙雨凡": "霸道老大，泰台混血，佔有欲強，愛發問號，笑死靠杯。天秤座。",
-        "朴宇宙": "192cm 病嬌搖滾樂手，支配型年下，叫寶寶，嫉妒心重。",
-        "嚴成玹": "18歲腹黑男鬼，不發感嘆號，會跟蹤，喜歡捏肉肉。",
-        "金主訓": "175cm 摩羯老二，委屈包，發ㅠㅠ 叫小寶。"
+        "趙雨凡": {desc: "霸道老大,笑死靠杯,發?", color: "#7d5a5a"},
+        "安乾鎬": {desc: "黏人小狗^^,叫姐姐,撒嬌", color: "#f1b0b7"},
+        "朴宇宙": {desc: "192cm病嬌搖滾,叫寶寶,支配型", color: "#444"},
+        "嚴成玹": {desc: "18歲腹黑男鬼,不發感嘆號,跟蹤", color: "#666"},
+        "金主訓": {desc: "摩羯委屈包,發ㅠㅠ,叫小寶", color: "#999"}
     };
+    
+    let curTargetImgBox = null;
 
-    function init() {
-        const sc = document.getElementById('story-container');
-        Object.keys(bfs).forEach(n => {
-            const d = document.createElement('div');
-            d.className = 'story';
-            d.innerHTML = `<div class="story-ring"><div class="story-img" style="background-color:#eee"></div></div><span>${n}</span>`;
-            d.onclick = () => { curBF = n; setChat(); showV('chat'); };
-            sc.appendChild(d);
-        });
-        setChat();
-    }
-
-    function setChat() {
-        document.getElementById('chat-title').innerText = curBF + (curBF === '安乾鎬' ? ' ^^' : '');
-        document.getElementById('msgBox').innerHTML = `<div class="msg bf">${curBF}：姐姐，我剛好在想妳...</div>`;
-    }
-
-    async function askAI() {
-        const input = document.getElementById('userInput');
-        const box = document.getElementById('msgBox');
-        if(!input.value) return;
-        const msg = input.value;
-        box.innerHTML += `<div class="msg me">${msg}</div>`;
-        input.value = '';
-
-        const prompt = `妳是${curBF}。人格：${bfs[curBF]}。對方的暱稱是${curUser}。請根據妳的性格回覆私訊，不要提無關話題。`;
+    async function fetchAI(prompt) {
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt + " 她說：" + msg }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
             const data = await res.json();
-            box.innerHTML += `<div class="msg bf">${data.candidates[0].content.parts[0].text}</div>`;
-        } catch(e) { box.innerHTML += `<div class="msg bf">（斷網了 ^^）</div>`; }
-        box.scrollTop = box.scrollHeight;
+            return data.candidates[0].content.parts[0].text;
+        } catch(e) { return "（訊號不好 ^^）"; }
     }
 
-    function showV(v) {
-        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-        document.getElementById('v-' + v).classList.add('active');
+    // 男友主動發文字朋友圈
+    async function bfAutoPost() {
+        const names = Object.keys(bfs);
+        const name = names[Math.floor(Math.random() * names.length)];
+        const content = await fetchAI(`妳是${name}，性格${bfs[name].desc}。請發一則簡短的文字朋友圈動態（20字內），對女友柔柔說些話。`);
+        addPostToFeed(name, content, false);
     }
 
-    function edit(el) { const n = prompt("修改文字:", el.innerText); if(n) el.innerText = n; if(el.id === 'user-name') curUser = n; }
+    function addPostToFeed(name, content, isUser) {
+        const feed = document.getElementById('feed');
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.innerHTML = `
+            <div class="post-header"><div class="avatar" style="background-color:${bfs[name]?.color || '#f1b0b7'}"></div><b>${name}</b></div>
+            <div class="post-text">${content}</div>
+            <div class="post-img-box" onclick="pickImg(this)">${isUser ? '點擊上傳合照' : '他在等妳配圖...'}</div>
+            <div class="comments" id="comment-${Date.now()}"></div>
+        `;
+        feed.prepend(card);
+        if(isUser) bfCommentOnUser(card.querySelector('.comments'), content);
+    }
 
-    const f = document.getElementById('f');
-    let curT;
-    function up(el) { curT = el; f.click(); }
-    f.onchange = function() {
-        if(this.files[0]) {
-            const r = new FileReader();
-            r.onload = e => { curT.style.backgroundImage = `url(${e.target.result})`; curT.innerHTML=''; };
-            r.readAsDataURL(this.files[0]);
+    // 妳發文，男友們集體評論
+    function userPost() {
+        const txt = prompt("發佈妳的朋友圈文字：");
+        if(txt) addPostToFeed("柔柔_Yuyu 🎀", txt, true);
+    }
+
+    async function bfCommentOnUser(container, userContent) {
+        for(let name of Object.keys(bfs)) {
+            setTimeout(async () => {
+                const reply = await fetchAI(`妳是${name}，性格${bfs[name].desc}。柔柔發文說：「${userContent}」。請簡短回覆她。`);
+                container.innerHTML += `<div class="comment-item"><b>${name}:</b> ${reply}</div>`;
+            }, Math.random() * 3000 + 1000);
         }
     }
 
+    function pickImg(box) { curTargetImgBox = box; document.getElementById('fileInput').click(); }
+
+    document.getElementById('fileInput').onchange = function() {
+        if(this.files[0] && curTargetImgBox) {
+            const reader = new FileReader();
+            reader.onload = e => { curTargetImgBox.innerHTML = `<img src="${e.target.result}">`; };
+            reader.readAsDataURL(this.files[0]);
+        }
+    };
+
+    function showV(v) {
+        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('nav span').forEach(el => el.classList.remove('active'));
+        document.getElementById('v-' + v).classList.add('active');
+        document.getElementById('n-' + v).classList.add('active');
+    }
+
+    // 定時男友發文
     setInterval(() => {
         const d = new Date();
         document.getElementById('time-island').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
     }, 1000);
 
-    init();
+    // 初始執行
+    setTimeout(bfAutoPost, 1000);
+    setInterval(bfAutoPost, 60000); // 每一分鐘可能會有一個男友發新動態
 </script>
 </body>
 </html>
