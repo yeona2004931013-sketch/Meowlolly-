@@ -3,97 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Lolly Miu Social</title>
+    <title>Lolly Miu Social Pro</title>
     <style>
-        :root { --miu-pink: #fff0f3; --accent: #f1b0b7; --text: #5d4037; --glass: rgba(255, 255, 255, 0.9); }
+        :root { --miu-pink: #fff5f7; --accent: #f1b0b7; --text: #5d4037; --glass: rgba(255, 255, 255, 0.95); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
         body { background: #fce4ec; height: 100vh; display: flex; justify-content: center; overflow: hidden; }
         
-        /* 手機主殼 */
         .phone-shell { 
             width: 100%; max-width: 500px; height: 100%; background: var(--miu-pink);
             position: relative; display: flex; flex-direction: column;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); /* 星空底紋感 */
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
         }
 
-        /* 動態島 (參考截圖 4, 10) */
+        /* 動態島 */
         .dynamic-island {
             width: 140px; height: 35px; background: #000; margin: 15px auto;
             border-radius: 20px; color: #fff; font-size: 13px; font-weight: bold;
             display: flex; align-items: center; justify-content: center; z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* 視圖區域 */
         .view { display: none; flex: 1; overflow-y: auto; padding-bottom: 90px; }
         .view.active { display: flex; flex-direction: column; }
 
-        /* 朋友圈卡片 (參考截圖 5, 9) */
+        /* 朋友圈卡片 */
         .post-card { 
-            background: var(--glass); margin: 12px; border-radius: 20px; 
-            padding: 15px; box-shadow: 0 5px 15px rgba(241,176,183,0.2);
+            background: #fff; margin: 12px; border-radius: 20px; 
+            padding: 15px; box-shadow: 0 4px 12px rgba(241,176,183,0.15);
         }
-        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; background-size: cover; border: 2px solid var(--accent); }
-        .post-img-box { 
-            width: 100%; aspect-ratio: 1/1; background: #fdf2f4; border-radius: 15px; 
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
+        .avatar-sm { width: 35px; height: 35px; border-radius: 50%; background: #eee; border: 1.5px solid var(--accent); background-size: cover; }
+        .post-img-placeholder { 
+            width: 100%; aspect-ratio: 1/1; background: #fffcfd; border-radius: 12px; 
             display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; border: 2px dashed var(--accent); color: var(--accent);
+            cursor: pointer; border: 2px dashed #f1b0b7; color: #f1b0b7;
             overflow: hidden; margin: 10px 0; font-size: 12px;
         }
-        .post-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .post-text { font-size: 14px; line-height: 1.6; color: var(--text); }
-        
-        /* 評論區 */
-        .comments { margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
-        .comment-item { font-size: 12px; margin-bottom: 4px; }
-        .comment-item b { color: var(--accent); margin-right: 5px; }
+        .post-img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 發文按鈕 (粉色懸浮) */
-        .fab { 
-            position: fixed; right: 25px; bottom: 100px; width: 60px; height: 60px; 
-            background: var(--accent); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; color: #fff; font-size: 28px;
-            box-shadow: 0 8px 20px rgba(241,176,183,0.4); z-index: 99;
-        }
+        /* 個人頁樣式 (參考截圖 10, 11) */
+        .profile-top { padding: 30px 20px; text-align: center; background: white; border-radius: 0 0 30px 30px; }
+        .avatar-lg { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); margin: 0 auto 15px; background: #eee; background-size: cover; cursor: pointer; }
+        .tab-menu { display: flex; justify-content: center; gap: 40px; margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .tab-menu span { font-size: 14px; color: #888; cursor: pointer; font-weight: bold; }
+        .tab-menu span.active { color: var(--text); border-bottom: 2px solid var(--text); }
 
-        /* 導航列 (參考截圖 3) */
-        nav { 
-            position: absolute; bottom: 0; width: 100%; height: 75px; 
-            background: #fff; display: flex; justify-content: space-around; 
-            align-items: center; border-top: 1px solid #eee; padding-bottom: 15px; 
-        }
-        nav span { font-size: 28px; cursor: pointer; opacity: 0.4; transition: 0.3s; }
-        nav span.active { opacity: 1; transform: translateY(-5px); color: var(--accent); }
+        /* 導航列 */
+        nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: #fff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; padding-bottom: 15px; }
+        nav span { font-size: 28px; cursor: pointer; opacity: 0.3; }
+        nav span.active { opacity: 1; color: var(--accent); }
     </style>
 </head>
 <body>
 
 <div class="phone-shell">
-    <div class="dynamic-island" id="time-island">09:41</div>
+    <div class="dynamic-island" id="island-time">09:41</div>
 
     <div id="v-home" class="view active">
-        <div id="feed"></div>
-        <div class="fab" onclick="userPost()">📸</div>
+        <div id="feed-flow"></div>
+        <div style="position:fixed; right:20px; bottom:100px; width:55px; height:55px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 4px 12px rgba(0,0,0,0.1);" onclick="userCreatePost()">📸</div>
     </div>
 
-    <div id="v-chat" class="view" style="background:#fff;">
-        <div style="padding:15px; text-align:center; font-weight:bold; color:var(--accent); border-bottom:1px solid #eee;" id="chat-target">安乾鎬 ^^</div>
+    <div id="v-chat" class="view" style="background:white;">
+        <div style="padding:15px; text-align:center; font-weight:bold; color:var(--accent); border-bottom:1px solid #eee;" id="chat-title">選擇男友聊天</div>
         <div id="msgBox" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px;"></div>
         <div style="padding:10px 15px 30px; display:flex; gap:10px; border-top:1px solid #eee;">
-            <input type="text" id="userInput" style="flex:1; border:1px solid #eee; border-radius:20px; padding:10px 15px; outline:none;" placeholder="傳送甜蜜訊息...">
+            <input type="text" id="userInput" style="flex:1; border:1px solid #eee; border-radius:20px; padding:10px 15px; outline:none;" placeholder="傳送訊息...">
             <button onclick="askAI()" style="background:none; border:none; font-size:24px;">💖</button>
+        </div>
+    </div>
+
+    <div id="v-me" class="view">
+        <div class="profile-top">
+            <div class="avatar-lg" id="my-ava" onclick="triggerUpload(this)"></div>
+            <h2 onclick="editTxt(this)">柔柔_Yuyu 🎀</h2>
+            <p style="font-size:12px; color:#999; margin-top:5px;">@yuyu_0623 · 桃園紅髮正妹</p>
+            <div class="tab-menu">
+                <span class="active">朋友圈</span>
+                <span>我的相冊</span>
+            </div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2px; padding:2px;">
+            <div style="aspect-ratio:1/1; background:#fff;" onclick="triggerUpload(this)"></div>
+            <div style="aspect-ratio:1/1; background:#fff;" onclick="triggerUpload(this)"></div>
+            <div style="aspect-ratio:1/1; background:#fff;" onclick="triggerUpload(this)"></div>
         </div>
     </div>
 
     <nav>
         <span onclick="showV('home')" id="n-home" class="active">🏠</span>
         <span onclick="showV('chat')" id="n-chat">💌</span>
-        <span onclick="showV('home')" id="n-me">👤</span>
+        <span onclick="showV('me')" id="n-me">👤</span>
     </nav>
 </div>
 
-<input type="file" id="fileInput" accept="image/*" style="display:none;">
+<input type="file" id="filePicker" style="display:none;" accept="image/*">
 
 <script>
     const KEY = "AIzaSyDwavT9b6YlpgwAW9eNkswuPsKI6QAP-AM";
@@ -101,87 +104,92 @@
         "趙雨凡": {desc: "霸道老大,笑死靠杯,發?", color: "#7d5a5a"},
         "安乾鎬": {desc: "黏人小狗^^,叫姐姐,撒嬌", color: "#f1b0b7"},
         "朴宇宙": {desc: "192cm病嬌搖滾,叫寶寶,支配型", color: "#444"},
-        "嚴成玹": {desc: "18歲腹黑男鬼,不發感嘆號,跟蹤", color: "#666"},
+        "嚴成玹": {desc: "18歲腹黑男鬼,不發感嘆號", color: "#666"},
         "金主訓": {desc: "摩羯委屈包,發ㅠㅠ,叫小寶", color: "#999"}
     };
-    
-    let curTargetImgBox = null;
+    let curChatBF = "安乾鎬";
 
-    async function fetchAI(prompt) {
+    async function callAI(p) {
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({contents: [{parts: [{text: p}]}]})
             });
-            const data = await res.json();
-            return data.candidates[0].content.parts[0].text;
-        } catch(e) { return "（訊號不好 ^^）"; }
+            const d = await r.json(); return d.candidates[0].content.parts[0].text;
+        } catch(e) { return "訊號弱 ^^"; }
     }
 
-    // 男友主動發文字朋友圈
-    async function bfAutoPost() {
-        const names = Object.keys(bfs);
-        const name = names[Math.floor(Math.random() * names.length)];
-        const content = await fetchAI(`妳是${name}，性格${bfs[name].desc}。請發一則簡短的文字朋友圈動態（20字內），對女友柔柔說些話。`);
-        addPostToFeed(name, content, false);
+    // 初始化：讓全體男友各發一則朋友圈
+    async function initFeed() {
+        for(let name in bfs) {
+            const txt = await callAI(`你是${name}，性格${bfs[name].desc}。發一則朋友圈給柔柔（15字內）。`);
+            renderPost(name, txt, false);
+        }
     }
 
-    function addPostToFeed(name, content, isUser) {
-        const feed = document.getElementById('feed');
+    function renderPost(name, txt, isMe) {
+        const flow = document.getElementById('feed-flow');
         const card = document.createElement('div');
         card.className = 'post-card';
         card.innerHTML = `
-            <div class="post-header"><div class="avatar" style="background-color:${bfs[name]?.color || '#f1b0b7'}"></div><b>${name}</b></div>
-            <div class="post-text">${content}</div>
-            <div class="post-img-box" onclick="pickImg(this)">${isUser ? '點擊上傳合照' : '他在等妳配圖...'}</div>
-            <div class="comments" id="comment-${Date.now()}"></div>
+            <div class="post-header" onclick="startChat('${name}')"><div class="avatar-sm" style="background-color:${bfs[name]?.color || '#f1b0b7'}"></div>${name}</div>
+            <div style="font-size:14px; margin:5px 0;">${txt}</div>
+            <div class="post-img-placeholder" onclick="triggerUpload(this)">${isMe ? '點擊上傳貼文圖' : '他在等妳配圖...'}</div>
+            <div id="cmts-${Date.now()}" style="font-size:12px; color:#666; border-top:1px solid #f9f9f9; padding-top:5px;"></div>
         `;
-        feed.prepend(card);
-        if(isUser) bfCommentOnUser(card.querySelector('.comments'), content);
+        flow.prepend(card);
+        if(isMe) autoComment(card.querySelector('[id^="cmts-"]'), txt);
     }
 
-    // 妳發文，男友們集體評論
-    function userPost() {
-        const txt = prompt("發佈妳的朋友圈文字：");
-        if(txt) addPostToFeed("柔柔_Yuyu 🎀", txt, true);
-    }
-
-    async function bfCommentOnUser(container, userContent) {
-        for(let name of Object.keys(bfs)) {
+    async function autoComment(box, userTxt) {
+        for(let n in bfs) {
             setTimeout(async () => {
-                const reply = await fetchAI(`妳是${name}，性格${bfs[name].desc}。柔柔發文說：「${userContent}」。請簡短回覆她。`);
-                container.innerHTML += `<div class="comment-item"><b>${name}:</b> ${reply}</div>`;
-            }, Math.random() * 3000 + 1000);
+                const c = await callAI(`你是${n}，性格${bfs[n].desc}。柔柔發了：${userTxt}，請簡短評論。`);
+                box.innerHTML += `<div style="margin-top:2px;"><b>${n}:</b> ${c}</div>`;
+            }, Math.random()*3000 + 1000);
         }
     }
 
-    function pickImg(box) { curTargetImgBox = box; document.getElementById('fileInput').click(); }
+    function startChat(name) { if(bfs[name]) { curChatBF = name; document.getElementById('chat-title').innerText = name; document.getElementById('msgBox').innerHTML = ''; showV('chat'); } }
 
-    document.getElementById('fileInput').onchange = function() {
-        if(this.files[0] && curTargetImgBox) {
-            const reader = new FileReader();
-            reader.onload = e => { curTargetImgBox.innerHTML = `<img src="${e.target.result}">`; };
-            reader.readAsDataURL(this.files[0]);
+    async function askAI() {
+        const inp = document.getElementById('userInput');
+        if(!inp.value) return;
+        const m = inp.value; inp.value = '';
+        const box = document.getElementById('msgBox');
+        box.innerHTML += `<div style="align-self:flex-end; background:var(--accent); color:white; padding:10px; border-radius:15px; max-width:80%;">${m}</div>`;
+        const ans = await callAI(`你是${curChatBF}，性格${bfs[curChatBF].desc}。回覆柔柔：${m}`);
+        box.innerHTML += `<div style="align-self:flex-start; background:#f0f0f0; padding:10px; border-radius:15px; max-width:80%;">${ans}</div>`;
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function userCreatePost() { const t = prompt("朋友圈文字："); if(t) renderPost("柔柔_Yuyu 🎀", t, true); }
+
+    function showV(v) {
+        document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+        document.querySelectorAll('nav span').forEach(e => e.classList.remove('active'));
+        document.getElementById('v-'+v).classList.add('active');
+        document.getElementById('n-'+v).classList.add('active');
+    }
+
+    let targetEl;
+    function triggerUpload(el) { targetEl = el; document.getElementById('filePicker').click(); }
+    document.getElementById('filePicker').onchange = function() {
+        if(this.files[0]) {
+            const r = new FileReader();
+            r.onload = e => { targetEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`; targetEl.style.backgroundImage = `url(${e.target.result})`; };
+            r.readAsDataURL(this.files[0]);
         }
     };
 
-    function showV(v) {
-        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('nav span').forEach(el => el.classList.remove('active'));
-        document.getElementById('v-' + v).classList.add('active');
-        document.getElementById('n-' + v).classList.add('active');
-    }
+    function editTxt(el) { const n = prompt("修改名稱:", el.innerText); if(n) el.innerText = n; }
 
-    // 定時男友發文
     setInterval(() => {
         const d = new Date();
-        document.getElementById('time-island').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
+        document.getElementById('island-time').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
     }, 1000);
 
-    // 初始執行
-    setTimeout(bfAutoPost, 1000);
-    setInterval(bfAutoPost, 60000); // 每一分鐘可能會有一個男友發新動態
+    initFeed();
 </script>
 </body>
 </html>
